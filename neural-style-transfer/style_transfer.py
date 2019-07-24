@@ -163,27 +163,25 @@ def train_step(image):
     image.assign(clip_image(image))
 
 
-print("commencing training")
-train_step(image_result)
-train_step(image_result)
-train_step(image_result)
-plt.imshow(image_result.read_value()[0])
-plt.show()
+print("Commencing Style Transfer...\n")
+# train_step(image_result)
+# train_step(image_result)
+# train_step(image_result)
+# plt.imshow(image_result.read_value()[0])
+# plt.show()
 
-# start = time.time()
-# num_of_epochs = 2
-# steps_per_epoch = 10
-# step_count = 0
-# for num in range(num_of_epochs):
-#     for s in range(steps_per_epoch):
-#         train_step(image_result)
-#         step_count += 1
-#         print("Training epoch %d in progress" % num)
-#
-#     display.clear_output(wait=True)
-#     plt.imshow(image_result.read_value())
-#     plt.title("Training epoch: {}".format(num))
-#     plt.show()
-#
-# end = time.time()
-# print("Total Time: {:.1f}".format(end - start))
+start = time.time()
+num_of_epochs = 5
+steps_per_epoch = 5
+for num in range(num_of_epochs):
+    print("Epoch %d in progress..." % (num + 1))
+    for s in range(steps_per_epoch):
+        train_step(image_result)
+
+    if num == num_of_epochs - 1:
+        display.clear_output(wait=True)
+        plt.imshow(image_result.read_value()[0])
+        plt.show()
+
+end = time.time()
+print("Total Time: {:.1f}".format(end - start))
