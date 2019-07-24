@@ -41,13 +41,13 @@ def show_image(img, title=None):
         plt.title = title
 
 
-content_image = load_image("./GOT_Doggo.png")
-style_image = load_image("./The Swing by Jean-Honoré Fragonard.png")
+content_image = load_image("./neural-style-transfer/GOT_Doggo.jpg")
+style_image = load_image("./neural-style-transfer/The Swing by Jean-Honoré Fragonard.jpg")
 plt.subplot(1, 2, 1)
 show_image(content_image, 'Content_Image')
 plt.subplot(1, 2, 2)
 show_image(style_image, 'Style_Image')
-plt.show()
+# plt.show()
 
 # preprocess_input = tf.keras.applications.vgg19.preprocess_input(content_image * 255)
 # preprocess_input = tf.image.resize(input, (224, 224))
@@ -163,26 +163,27 @@ def train_step(image):
     image.assign(clip_image(image))
 
 
-# train_step(image_result)
-# train_step(image_result)
-# train_step(image_result)
-# plt.imshow(image_result.read_value()[0])
-# plt.show()
+print("commencing training")
+train_step(image_result)
+train_step(image_result)
+train_step(image_result)
+plt.imshow(image_result.read_value()[0])
+plt.show()
 
-start = time.time()
-num_of_epochs = 10
-steps_per_epoch = 10
-step_count = 0
-for num in range(num_of_epochs):
-    for s in range(steps_per_epoch):
-        train_step(image_result)
-        step_count += 1
-        print("Training epoch %d in progress" % num)
-
-    display.clear_output(wait=True)
-    plt.imshow(image_result.read_value())
-    plt.title("Training epoch: {}".format(num))
-    plt.show()
-
-end = time.time()
-print("Total Time: {:.1f}".format(end - start))
+# start = time.time()
+# num_of_epochs = 2
+# steps_per_epoch = 10
+# step_count = 0
+# for num in range(num_of_epochs):
+#     for s in range(steps_per_epoch):
+#         train_step(image_result)
+#         step_count += 1
+#         print("Training epoch %d in progress" % num)
+#
+#     display.clear_output(wait=True)
+#     plt.imshow(image_result.read_value())
+#     plt.title("Training epoch: {}".format(num))
+#     plt.show()
+#
+# end = time.time()
+# print("Total Time: {:.1f}".format(end - start))
