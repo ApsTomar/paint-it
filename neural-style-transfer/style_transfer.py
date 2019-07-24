@@ -42,7 +42,7 @@ def show_image(img, title=None):
 
 
 content_image = load_image("./neural-style-transfer/GOT_Doggo.jpg")
-style_image = load_image("./neural-style-transfer/The Swing by Jean-Honoré Fragonard.jpg")
+style_image = load_image("./neural-style-transfer/Udnie by Francis_Picabia.jpg")
 plt.subplot(1, 2, 1)
 show_image(content_image, 'Content_Image')
 plt.subplot(1, 2, 2)
@@ -135,10 +135,6 @@ style_weight = 1e-2
 content_weight = 1e4
 
 
-def clip_image(image):
-    return tf.clip_by_value(image, clip_value_min=0.0, clip_value_max=1.0)
-
-
 def style_content_loss(extracted_output):
     style_outputs = extracted_output['style']
     content_outputs = extracted_output['content']
@@ -152,11 +148,26 @@ def style_content_loss(extracted_output):
     return total_loss
 
 
+def clip_image(image):
+    return tf.clip_by_value(image, clip_value_min=0.0, clip_value_max=1.0)
+
+
+def total_variation_loss(image):
+    x_deltas = image[:, :, 1:, :] - image[:, :, :-1, :]
+    y_deltas = image[:, 1:, :, :] - image[:, :-1, :, :]
+    var_loss = tf.reduce_mean(x_deltas ** 2) + tf.reduce_mean(y_deltas ** 2)
+    return var_loss
+
+
+total_variation_weight = 1e8
+
+
 @tf.function()
 def train_step(image):
     with tf.GradientTape() as tape:
         outputs = extractor(image)
         loss = style_content_loss(outputs)
+        loss += total_variation_weight * total_variation_loss(image)
 
     gradient = tape.gradient(loss, image)
     optimizer.apply_gradients([(gradient, image)])
@@ -164,15 +175,10 @@ def train_step(image):
 
 
 print("Commencing Style Transfer...\n")
-# train_step(image_result)
-# train_step(image_result)
-# train_step(image_result)
-# plt.imshow(image_result.read_value()[0])
-# plt.show()
 
 start = time.time()
 num_of_epochs = 5
-steps_per_epoch = 5
+steps_per_epoch = 10
 for num in range(num_of_epochs):
     print("Epoch %d in progress..." % (num + 1))
     for s in range(steps_per_epoch):
