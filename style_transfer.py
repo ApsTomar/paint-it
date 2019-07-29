@@ -2,17 +2,19 @@ import tensorflow as tf
 import IPython.display as display
 import matplotlib.pyplot as plt
 import matplotlib as mpl
+import argparse
+import time
 
 mpl.rcParams['figure.figsize'] = (12, 12)
 mpl.rcParams['axes.grid'] = False
 tf.compat.v1.enable_eager_execution()
 
-import time
-
-content_path = tf.keras.utils.get_file('turtle.jpg',
-                                       'https://storage.googleapis.com/download.tensorflow.org/example_images/Green_Sea_Turtle_grazing_seagrass.jpg')
-style_path = tf.keras.utils.get_file('kandinsky.jpg',
-                                     'https://storage.googleapis.com/download.tensorflow.org/example_images/Vassily_Kandinsky%2C_1913_-_Composition_7.jpg')
+parser = argparse.ArgumentParser()
+parser.add_argument('--content', help='content_image path')
+parser.add_argument('--style', help='style_image path')
+args = parser.parse_args()
+content_path = args.content
+style_path = args.style
 
 
 def load_image(img_path):
@@ -39,17 +41,9 @@ def show_image(img, title=None):
     plt.show()
 
 
-# for samoyed image painted in Udnie style by Francis Picabia:
-content_image = load_image("./neural-style-transfer/content_samoyed.jpg")
-style_image = load_image("./neural-style-transfer/style_Udnie_by_Francis_Picabia.jpg")
-
-# for sea-turtle image results:
-# content_image = load_image(content_path)
-# style_image = load_image(style_path)
-
-plt.subplot(1, 2, 1)
+content_image = load_image(content_path)
+style_image = load_image(style_path)
 show_image(content_image, 'Content_Image')
-plt.subplot(1, 2, 2)
 show_image(style_image, 'Style_Image')
 plt.show()
 
